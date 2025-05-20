@@ -19,3 +19,35 @@ Steps to be flowed in the respective order for execution in a CLI:
     ii) To just test the chatbot we can start of with a small number like 50 or 100, like this:  python main.py --interactive 50
         This will take 1-2 mins to process.
    iii) If no argument is passed, the default value is set to a 1000, which take approximately 4 mins to process.
+
+
+How semantic understanding and similarity matching are implemented
+Semantic understanding is achieved using pre-trained transformer-based embedding models (likely from sentence-transformers) that convert text chunks into dense vector representations (embed_texts). These embeddings capture the meaning of the text beyond keyword matching.
+Similarity matching is performed in two stages:
+
+1. Retrieval:
+FAISS is used to build a vector index from chunk embeddings (build_faiss_index). At query time, the input is embedded and nearest neighbor search retrieves the most semantically similar chunks (retrieve_chunks).
+
+2. Re-ranking:
+The retrieved chunks are further refined using a cross-encoder re-ranker (rerank function using BAAI/bge-reranker-base). This model scores query–passage pairs for relevance and reorders the top candidates based on deeper contextual alignment.
+
+Challenges faced and how they were resolved
+1. Slow Initialization (Latency)
+Issue: Long startup times due to computing embeddings every time the script runs.
+
+Resolution: Introduced optional arguments to control the number of chunks processed (e.g. --interactive 500 or --interactive all), reducing compute time during development and testing. Further optimization may involve caching or persisting embeddings for reuse.
+
+2. Re-ranker Integration
+Issue: The re-ranker model uses a cross-encoder architecture, which is more accurate but also computationally intensive.
+
+Resolution: Applied re-ranking only on the top few retrieved results, significantly reducing overhead while preserving accuracy.
+
+3. Dynamic Input Handling
+Issue: Supporting multiple use cases such as single queries, full interactive chat, and variable dataset sizes required flexible command-line control.
+
+Resolution: Used argparse to accept optional parameters and conditionally handle chunk sizes and input modes, enabling more adaptable workflows.
+
+4. Hardware Limitations (GPU)
+Issue: The local GPU was not functioning, which prevented full optimization for GPU acceleration.
+
+Resolution: Despite the hardware constraint, the system was built to be modular and compatible with GPU support. Models and tensors were kept device-agnostic (e.g., with future to(device) calls in mind), ensuring that performance can be scaled when GPU support is restored or deployed to cloud environments.

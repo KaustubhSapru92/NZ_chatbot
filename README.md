@@ -19,7 +19,7 @@ Steps to be flowed in the respective order for execution in a CLI:
     ii) To just test the chatbot we can start of with a small number like 50 or 100, like this:  python main.py --interactive 50
         This will take 1-2 mins to process.
    iii) If no argument is passed, the default value is set to a 1000, which take approximately 4 mins to process.
-
+9. Chatbot can also be run on Colab. Just need to upload all the files into one destination in colab, followed by pip install -r requirements.txt. We would need to run main_colab.py in this case.
 
 How semantic understanding and similarity matching are implemented
 Semantic understanding is achieved using pre-trained transformer-based embedding models (likely from sentence-transformers) that convert text chunks into dense vector representations (embed_texts). These embeddings capture the meaning of the text beyond keyword matching.

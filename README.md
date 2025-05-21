@@ -6,7 +6,7 @@ Steps to be flowed in the respective order for execution in a CLI:
 3. python -m venv myenv  #you can give an appropriate name to your environment
 4. Activate your environment. source myenv/bin/activate.
 5. Time to install the requirements. pip install -r requirements.txt
-6. Make we have all the information in our knowledge repository. Let's scrap the text fields if that are missing. Here is how to do it:
+6. Make sure we have all the information in our knowledge repository. Let's scrap the text fields if that are missing. Here is how to do it:
      i) Run the file scrap.py followed by the path of the knowledge repository. Like this :
     ii) python scrap.py /mnt/e/Downloads/NZ_AI_CHALLENGE_2025/NZ_AI_CHALLENGE_2025/wikipedia_sample_with_10_percent_batch_text_null.csv
    iii) This will save a new csv file with the scrapped details in the same directory with the name 'NZ_repository_scrapped_1.csv'.
